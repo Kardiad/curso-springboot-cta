@@ -39,6 +39,22 @@ public class Alumno {
 	private void generateDate() {
 		this.admision = LocalDateTime.now();
 	}
+	
+	public Alumno() {
+		super();
+	}
+
+	public Alumno(long id, String name, String surname, String email, int age) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.surname = surname;
+		this.email = email;
+		this.age = age;
+		this.generateDate();
+	}
+
+
 
 	public long getId() {
 		return id;
