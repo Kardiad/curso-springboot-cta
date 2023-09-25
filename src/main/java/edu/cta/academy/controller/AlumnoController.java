@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,9 @@ import edu.cta.academy.service.AlumnoService;
 @RestController
 @RequestMapping("/students") //todo lo que es alumno es para aquí
 public class AlumnoController {
+	
+	//Creamos un logger para el controller.
+	Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	AlumnoService service;
@@ -93,9 +98,16 @@ public class AlumnoController {
 	}
 
 	@PostMapping("/insert")
-	public ResponseEntity<?> insertStudent(@RequestBody Alumno student) {
-		Alumno a = this.service.insertStudent(student);
-		return ResponseEntity.status(HttpStatus.CREATED).body(a);	
+	public ResponseEntity<?> insertStudent(@RequestBody Alumno student, BindingResult br) {
+		if(br.hasErrors()) {
+			br.getAllErrors().forEach(error->log.error(error.toString()));
+			return ResponseEntity
+					.status(HttpStatus.BAD_REQUEST)
+					.body(br.getAllErrors());
+		}else {
+			Alumno a = this.service.insertStudent(student);
+			return ResponseEntity.status(HttpStatus.CREATED).body(a);	
+		}
 	}
 	
 	
