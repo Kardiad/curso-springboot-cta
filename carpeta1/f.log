@@ -1,0 +1,15 @@
+2023-09-25 19:24:21.539  INFO 2856 --- [restartedMain] edu.cta.academy.MsAlumnosApplication     : Starting MsAlumnosApplication using Java 17.0.8.1 on Aula507 with PID 2856 (C:\Users\CTA\git\curso-springboot-cta\target\classes started by CTA in C:\Users\CTA\git\curso-springboot-cta)
+2023-09-25 19:24:21.540 DEBUG 2856 --- [restartedMain] edu.cta.academy.MsAlumnosApplication     : Running with Spring Boot v2.7.15, Spring v5.3.29
+2023-09-25 19:24:21.540  INFO 2856 --- [restartedMain] edu.cta.academy.MsAlumnosApplication     : No active profile set, falling back to 1 default profile: "default"
+2023-09-25 19:24:21.754  INFO 2856 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-09-25 19:24:21.763  INFO 2856 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 1 JPA repository interfaces.
+2023-09-25 19:24:21.865  INFO 2856 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2023-09-25 19:24:21.865  INFO 2856 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-09-25 19:24:21.866  INFO 2856 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.79]
+2023-09-25 19:24:21.885  INFO 2856 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-09-25 19:24:21.885  INFO 2856 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 342 ms
+2023-09-25 19:24:21.914  INFO 2856 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-09-25 19:24:21.919  INFO 2856 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Starting...
+2023-09-25 19:24:21.934  INFO 2856 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Start completed.
+2023-09-25 19:24:21.934  INFO 2856 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-09-25 19:24:21.966  INFO 2856 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
