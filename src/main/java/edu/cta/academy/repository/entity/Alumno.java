@@ -9,6 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 //Versiones de esta movida, por lo que veo si es 2.5 es como proyecto 2 versión 5.
 
@@ -21,15 +27,21 @@ public class Alumno {
 	private long id;
 	
 	@Column(name="nombre")
+	@Size(min=3, max=30)
 	private String name;
 	
 	@Column(name="apellidos")
+	@NotEmpty
+	@NotBlank // No valen strings vacíos
 	private String surname;
 	
 	@Column(name="correo_electronico")
+	@Email
 	private String email;
 	
 	@Column(name="edad")
+	@Min(3)
+	@Max(116)
 	private int age;
 	
 	@Column(name="fecha_alta")

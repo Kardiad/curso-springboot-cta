@@ -2,10 +2,13 @@ package edu.cta.academy.controller;
 
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,36 +45,36 @@ public class AlumnoController {
 	
 	@GetMapping("/list")
 	public ResponseEntity<?> listStudent() {
+		/*var nombre = "sdjfjhaskdjfhasdklfhsklfhaskl";
+		nombre.charAt(10000);*/
 		return ResponseEntity.ok(this.service.allStudents());
 	}
 
+	//@Valid vale para validar según lo anotado en validations en el modelo
+	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> findOneStudent(@PathVariable String id) {
-		try {
-			long id_parsed = Long.parseLong(id);			
-			if(this.service.findOneStudent(id_parsed).isEmpty()) {
-				return ResponseEntity.noContent().build();
-			}else {
-				return ResponseEntity.ok(this.service.findOneStudent(id_parsed).get());			
-			}
-		}catch(Exception e) {
-			return ResponseEntity.noContent().build();
+	public ResponseEntity<?> findOneStudent(@Valid @PathVariable long id, BindingResult br) {
+		if(br.hasErrors()) {
+			return ResponseEntity
+					.status(HttpStatus.BAD_REQUEST)
+					.body(br.getAllErrors());
 		}
+		return ResponseEntity.ok(this.service.findOneStudent(id).get());			
 	}
 
 	@PutMapping("/modify/{id}")
-	public ResponseEntity<?> editStudentById(@RequestBody Alumno student, @PathVariable long id) {
+	public ResponseEntity<?> editStudentById(@Valid @RequestBody Alumno student, @PathVariable long id) {
 		// TODO Auto-generated method stub
 		ResponseEntity<?> responseEntity = null;
 		Optional<Alumno> oa = null;//alumno
 		
 			oa =  this.service.editStudentById(student, id);
-			
-			if (oa.isEmpty())
-			{
+			if (oa.isEmpty()){
 				//si no está--devolver el cuerpo vacío y 404 no content
-				responseEntity = ResponseEntity.notFound().build();
-			}  else {
+				responseEntity = ResponseEntity
+						.notFound()
+						.build();
+			} else {
 				//el optional tiene un alumno //si está--devolver el alumno y 200 ok
 				Alumno alumno_modificado = oa.get();
 				responseEntity = ResponseEntity.ok(alumno_modificado);
@@ -84,20 +87,15 @@ public class AlumnoController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Object> deleteStudent(@PathVariable String id) {
 		// TODO Auto-generated method stub
-		try {
-			long id_parsed = Long.parseLong(id);			
-			this.service.deleteStudent(id_parsed);
-			return ResponseEntity.status(HttpStatus.OK).body("Student with "+id_parsed+" id was deleted suscessfull");
-		}catch(Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
-		}
+		long id_parsed = Long.parseLong(id);			
+		this.service.deleteStudent(id_parsed);
+		return ResponseEntity.status(HttpStatus.OK).body("Student with "+id_parsed+" id was deleted suscessfull");
 	}
 
 	@PostMapping("/insert")
 	public ResponseEntity<?> insertStudent(@RequestBody Alumno student) {
 		Alumno a = this.service.insertStudent(student);
-		return ResponseEntity.status(HttpStatus.CREATED).body(a);
-		
+		return ResponseEntity.status(HttpStatus.CREATED).body(a);	
 	}
 	
 	
