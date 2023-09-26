@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 
+import edu.cta.academy.DTO.Chiquitada;
 import edu.cta.academy.repository.entity.Alumno;
 
 //¿Qué es lo que hacemos?
@@ -31,4 +32,6 @@ public interface AlumnoService {
     Map<String,Number> stadistics();
     Iterable<Alumno> findAll(Pageable pageable);
     Iterable<Alumno> findByEdadBetween(int edadmin, int edadmax, Pageable pageable);
+    //Nota esto es otra chiquitada que no habría que hacerse, porque debería de hacerse otro microservice
+    Optional<Chiquitada> randomChiquito();
 }

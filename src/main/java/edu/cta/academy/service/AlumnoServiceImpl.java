@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
+import edu.cta.academy.DTO.Chiquitada;
 import edu.cta.academy.repository.AlumnoRepository;
 import edu.cta.academy.repository.entity.Alumno;
 
@@ -122,6 +124,12 @@ public class AlumnoServiceImpl implements AlumnoService {
 	@Transactional
 	public Iterable<Alumno> findByEdadBetween(int edadmin, int edadmax, Pageable pageable) {
 		return this.sudentRepository.findByAgeBetween(edadmin, edadmax, pageable);
+	}
+
+	@Override
+	public Optional<Chiquitada> randomChiquito() {
+		// TODO Auto-generated method stub
+		return Optional.of((new RestTemplate()).getForObject("https://chiquitadas.es/api/quotes/avoleorrr", Chiquitada.class));
 	}
 	
 	

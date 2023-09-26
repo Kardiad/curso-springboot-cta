@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.cta.academy.DTO.Chiquitada;
 import edu.cta.academy.repository.entity.Alumno;
 import edu.cta.academy.service.AlumnoService;
 
@@ -157,11 +158,18 @@ public class AlumnoController {
 		return ResponseEntity.ok(this.service.findAll(pageable));
 	}
 	
+	// http://localhost:8081/students/pagedbyage?edadmin=2&edadmax=40&page=0&size=3
 	@GetMapping("/pagedbyage")
 	public ResponseEntity<?> paginatedByAges(
 			@RequestParam(required = true, name = "edadmin") int edadmin, 
 			@RequestParam(required = true, name = "edadmax") int edadmax, Pageable pageable){
 		return ResponseEntity.ok( this.service.findByEdadBetween(edadmin, edadmax, pageable));
+	}
+	
+	@GetMapping("/chiquitada")
+	public ResponseEntity<?> chiquitada(){
+		Optional<Chiquitada> ch = this.service.randomChiquito();
+		return ResponseEntity.ok((ch.isPresent())?this.service.randomChiquito():null);
 	}
 	
 }
