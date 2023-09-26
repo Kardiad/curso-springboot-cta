@@ -2,6 +2,7 @@ package edu.cta.academy.controller;
 
 import java.util.Optional;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -137,5 +138,16 @@ public class AlumnoController {
 	public ResponseEntity<?> getByPatt(
 			@RequestParam(required = true, name = "pattern") String pattern){
 		return ResponseEntity.ok(this.service.findByNameOrSurnameNoNative(pattern));
+	}
+	
+	@GetMapping("/stadistics")
+	public ResponseEntity<?> getStadistics(){
+		return ResponseEntity.ok(this.service.stadistics());
+	}
+	
+	@GetMapping("/stadisticsdate")
+	public ResponseEntity<?> getSudentsToday(){
+		return ResponseEntity.ok(this.service.studentsRegisteredToday());
+		
 	}
 }

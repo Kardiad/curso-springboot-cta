@@ -1,5 +1,6 @@
 package edu.cta.academy.service;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
@@ -77,26 +78,37 @@ public class AlumnoServiceImpl implements AlumnoService {
 	}
 
 	@Override
+	@Transactional
 	public Iterable<Alumno> findByNombreContaining(String name) {
 		return this.sudentRepository.findByNameContaining(name);
 	}
 
 	@Override
+	@Transactional
 	public Iterable<Alumno> findByNameOrSurname(String pattern) {
 		// TODO Auto-generated method stub
 		return this.sudentRepository.encuentraPorNombreOApellido(pattern);
 	}
 
 	@Override
+	@Transactional
 	public Iterable<Alumno> findByNameOrSurnameNoNative(String pattern) {
 		// TODO Auto-generated method stub
 		return this.sudentRepository.encuentraPorNombreOApellidoNoNativo(pattern);
 	}
 
 	@Override
+	@Transactional
 	public Iterable<Alumno> studentsRegisteredToday() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.sudentRepository.obtenerAlumnosRegistradosHoy();
+	}
+
+	@Override
+	@Transactional
+	public Map<String, Number> stadistics() {
+		// TODO Auto-generated method stub
+		return this.sudentRepository.getStadisticsOfStudents(0, 0, 0F);
 	}
 	
 	
