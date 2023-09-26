@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import edu.cta.academy.repository.entity.Alumno;
@@ -14,7 +15,7 @@ import edu.cta.academy.repository.entity.Alumno;
  * Esta clase se dedicará a interactuar con la BBDD.
  * */
 @Repository
-public interface AlumnoRepository extends CrudRepository<Alumno, Long> {
+public interface AlumnoRepository extends PagingAndSortingRepository<Alumno, Long>  {
 	 //consulta los alumnos que estén en un rango de edad
     Iterable<Alumno> findByAgeBetween(int edadmin, int edadmax);
     
@@ -41,5 +42,7 @@ public interface AlumnoRepository extends CrudRepository<Alumno, Long> {
     
     @Procedure(name="Alumno.alumnosEdadMediaMinMax")
     Map<String, Number> getStadisticsOfStudents(int edadmin, int edadmax, float edadmedia);
+    
+    //Paginados fácil: https://docs.spring.io/spring-data/commons/docs/2.4.5/api/index.html?org/springframework/data/repository/CrudRepository.html
     
 }

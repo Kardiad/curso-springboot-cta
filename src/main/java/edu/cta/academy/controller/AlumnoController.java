@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -147,7 +148,12 @@ public class AlumnoController {
 	
 	@GetMapping("/stadisticsdate")
 	public ResponseEntity<?> getSudentsToday(){
-		return ResponseEntity.ok(this.service.studentsRegisteredToday());
-		
+		return ResponseEntity.ok(this.service.studentsRegisteredToday());	
+	}
+	
+	// https://docs.spring.io/spring-data/commons/docs/2.4.5/api/org/springframework/data/domain/Pageable.html pageables
+	@GetMapping("/pagedstudents") //GET http://localhost:8081/students/pagedstudents?page=0&size=2
+	public ResponseEntity<?> paginatedStudent(Pageable pageable){
+		return ResponseEntity.ok(this.service.findAll(pageable));
 	}
 }
