@@ -30,4 +30,5 @@ public interface AlumnoService {
     Iterable<Alumno> studentsRegisteredToday();
     Map<String,Number> stadistics();
     Iterable<Alumno> findAll(Pageable pageable);
+    Iterable<Alumno> findByEdadBetween(int edadmin, int edadmax, Pageable pageable);
 }

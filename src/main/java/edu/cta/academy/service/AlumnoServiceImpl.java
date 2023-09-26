@@ -117,6 +117,12 @@ public class AlumnoServiceImpl implements AlumnoService {
 	public Iterable<Alumno> findAll(Pageable pageable) {
 		return this.sudentRepository.findAll(pageable);
 	}
+
+	@Override
+	@Transactional
+	public Iterable<Alumno> findByEdadBetween(int edadmin, int edadmax, Pageable pageable) {
+		return this.sudentRepository.findByAgeBetween(edadmin, edadmax, pageable);
+	}
 	
 	
 }

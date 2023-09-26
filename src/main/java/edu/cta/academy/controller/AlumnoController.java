@@ -156,4 +156,12 @@ public class AlumnoController {
 	public ResponseEntity<?> paginatedStudent(Pageable pageable){
 		return ResponseEntity.ok(this.service.findAll(pageable));
 	}
+	
+	@GetMapping("/pagedbyage")
+	public ResponseEntity<?> paginatedByAges(
+			@RequestParam(required = true, name = "edadmin") int edadmin, 
+			@RequestParam(required = true, name = "edadmax") int edadmax, Pageable pageable){
+		return ResponseEntity.ok( this.service.findByEdadBetween(edadmin, edadmax, pageable));
+	}
+	
 }

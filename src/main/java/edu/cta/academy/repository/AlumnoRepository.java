@@ -2,6 +2,8 @@ package edu.cta.academy.repository;
 
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.CrudRepository;
@@ -44,5 +46,7 @@ public interface AlumnoRepository extends PagingAndSortingRepository<Alumno, Lon
     Map<String, Number> getStadisticsOfStudents(int edadmin, int edadmax, float edadmedia);
     
     //Paginados fácil: https://docs.spring.io/spring-data/commons/docs/2.4.5/api/index.html?org/springframework/data/repository/CrudRepository.html
+    
+    Page<Alumno> findByAgeBetween(int edadmin, int edadmax, Pageable pageable);
     
 }
