@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.cta.academy.repository.entity.Alumno;
@@ -110,6 +111,31 @@ public class AlumnoController {
 		}
 	}
 	
+	@GetMapping("/between")
+	public ResponseEntity<?> betweenAges(
+			@RequestParam(required = true, name = "edadmin") int edadmin, 
+			@RequestParam(required = true, name = "edadmax") int edadmax){
+		ResponseEntity<?> responseEntity = null;
+		Iterable<Alumno> ita = null;// lista de alumnos
+		ita = this.service.findByEdadBetween(edadmin, edadmax);
+		responseEntity = ResponseEntity.ok(ita);// ita es el cuerpo
+		return responseEntity;
+	}
 	
+	@GetMapping("/contains")
+	public ResponseEntity<?> listByName(
+			@RequestParam(required = true, name = "nombre") String nombre){
+		return ResponseEntity.ok(this.service.findByNombreContaining(nombre));
+	}
 	
+	@GetMapping("/findby/{pattern}")
+	public ResponseEntity<?> getByPattern(String pattern){
+		return ResponseEntity.ok(this.service.findByNameOrSurname(pattern));
+	}
+	
+	@GetMapping("/findclass")
+	public ResponseEntity<?> getByPatt(
+			@RequestParam(required = true, name = "pattern") String pattern){
+		return ResponseEntity.ok(this.service.findByNameOrSurnameNoNative(pattern));
+	}
 }

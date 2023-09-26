@@ -19,4 +19,9 @@ public interface AlumnoService {
 	Optional<Alumno> editStudentById(Alumno student, long id);
 	void deleteStudent(long id);
 	Alumno insertStudent(Alumno student);
+    Iterable<Alumno> findByEdadBetween(int edadmin, int edadmax);
+    Iterable<Alumno> findByNombreContaining(String name);
+    Iterable<Alumno> findByNameOrSurname(String pattern);
+    Iterable<Alumno> findByNameOrSurnameNoNative(String pattern);
+    Iterable<Alumno> studentsRegisteredToday();
 }

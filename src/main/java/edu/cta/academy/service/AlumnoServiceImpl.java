@@ -68,6 +68,36 @@ public class AlumnoServiceImpl implements AlumnoService {
 	public Alumno insertStudent(Alumno student) {
 		return this.sudentRepository.save(student);
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Iterable<Alumno> findByEdadBetween(int edadmin, int edadmax) {
+		// TODO Auto-generated method stub
+		return this.sudentRepository.findByAgeBetween(edadmin, edadmax);
+	}
+
+	@Override
+	public Iterable<Alumno> findByNombreContaining(String name) {
+		return this.sudentRepository.findByNameContaining(name);
+	}
+
+	@Override
+	public Iterable<Alumno> findByNameOrSurname(String pattern) {
+		// TODO Auto-generated method stub
+		return this.sudentRepository.encuentraPorNombreOApellido(pattern);
+	}
+
+	@Override
+	public Iterable<Alumno> findByNameOrSurnameNoNative(String pattern) {
+		// TODO Auto-generated method stub
+		return this.sudentRepository.encuentraPorNombreOApellidoNoNativo(pattern);
+	}
+
+	@Override
+	public Iterable<Alumno> studentsRegisteredToday() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 	
