@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +32,7 @@ import edu.cta.academy.service.AlumnoService;
 /*
  * Esta clase se dedicará a recibir peticiones de cte.
  * */
+@CrossOrigin(originPatterns= {"*"}, methods = {RequestMethod.GET})
 @RestController
 @RequestMapping("/students") //todo lo que es alumno es para aquí
 public class AlumnoController {
@@ -104,7 +107,8 @@ public class AlumnoController {
 	@PostMapping("/insert")
 	public ResponseEntity<?> insertStudent(@RequestBody Alumno student, BindingResult br) {
 		if(br.hasErrors()) {
-			br.getAllErrors().forEach(error->log.error(error.toString()));
+			br.getAllErrors()
+				.forEach(error->log.error(error.toString()));
 			return ResponseEntity
 					.status(HttpStatus.BAD_REQUEST)
 					.body(br.getAllErrors());
@@ -153,7 +157,8 @@ public class AlumnoController {
 	}
 	
 	// https://docs.spring.io/spring-data/commons/docs/2.4.5/api/org/springframework/data/domain/Pageable.html pageables
-	@GetMapping("/pagedstudents") //GET http://localhost:8081/students/pagedstudents?page=0&size=2
+	// GET http://localhost:8081/students/pagedstudents?page=0&size=2
+	@GetMapping("/pagedstudents") 
 	public ResponseEntity<?> paginatedStudent(Pageable pageable){
 		return ResponseEntity.ok(this.service.findAll(pageable));
 	}
@@ -163,7 +168,7 @@ public class AlumnoController {
 	public ResponseEntity<?> paginatedByAges(
 			@RequestParam(required = true, name = "edadmin") int edadmin, 
 			@RequestParam(required = true, name = "edadmax") int edadmax, Pageable pageable){
-		return ResponseEntity.ok( this.service.findByEdadBetween(edadmin, edadmax, pageable));
+		return ResponseEntity.ok(this.service.findByEdadBetween(edadmin, edadmax, pageable));
 	}
 	
 	@GetMapping("/chiquitada")
