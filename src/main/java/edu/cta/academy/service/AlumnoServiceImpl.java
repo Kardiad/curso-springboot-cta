@@ -33,7 +33,7 @@ public class AlumnoServiceImpl implements AlumnoService {
 
 	@Override
 	@Transactional(readOnly = true) //Permite acceso concurrente a la bbdd
-	public Optional<Alumno> findOneStudent(long id) {
+	public Optional<Alumno> findById(long id) {
 		return this.sudentRepository.findById(id);
 	}
 

@@ -71,7 +71,7 @@ public class AlumnoController {
 					.status(HttpStatus.BAD_REQUEST)
 					.body(br.getAllErrors());
 		}
-		return ResponseEntity.ok(this.service.findOneStudent(id).get());			
+		return ResponseEntity.ok(this.service.findById(id).get());			
 	}
 
 	@PutMapping("/modify/{id}")

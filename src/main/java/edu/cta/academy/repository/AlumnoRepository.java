@@ -19,6 +19,8 @@ import edu.cta.academy.repository.entity.Alumno;
 @Repository
 public interface AlumnoRepository extends PagingAndSortingRepository<Alumno, Long>  {
 	 //consulta los alumnos que estén en un rango de edad
+	
+	
     Iterable<Alumno> findByAgeBetween(int edadmin, int edadmax);
     
     //consultar los alumnos que contengan un nombre dado 

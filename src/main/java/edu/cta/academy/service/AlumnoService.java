@@ -19,7 +19,7 @@ public interface AlumnoService {
 		/*-> CONSULTA 1 check
 		/ -> CONSULTAR TODOS check*/
 	Iterable<Alumno> allStudents();
-	Optional<Alumno> findOneStudent(long id);
+	Optional<Alumno> findById(long id);
 	Optional<Alumno> editStudentById(Alumno student, long id);
 	void deleteStudent(long id);
 	Alumno insertStudent(Alumno student);
