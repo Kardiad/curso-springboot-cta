@@ -32,149 +32,129 @@ import edu.cta.academy.service.AlumnoService;
 /*
  * Esta clase se dedicará a recibir peticiones de cte.
  * */
-@CrossOrigin(originPatterns= {"*"}, methods = {RequestMethod.GET})
+@CrossOrigin(originPatterns = { "*" }, methods = { RequestMethod.GET })
 @RestController
-@RequestMapping("/students") //todo lo que es alumno es para aquí
+@RequestMapping("/students") // todo lo que es alumno es para aquí
 public class AlumnoController {
-	
-	//Creamos un logger para el controller.
+
+	// Creamos un logger para el controller.
 	Logger log = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Autowired
 	AlumnoService service;
 
-	//ResponseEntity: mensaje http de respuesta, 
-	//se puede cambiar el wildcard ? por una clase 
-	//que haga la respuesta adecuada si la quieres más cerrada
+	// ResponseEntity: mensaje http de respuesta,
+	// se puede cambiar el wildcard ? por una clase
+	// que haga la respuesta adecuada si la quieres más cerrada
 	@GetMapping("/test")
 	public Alumno test() {
-		//Esto es un estado de transient, es decir que no está asociado a la bbdd ni a ningún registro
-		//Estado del objeto es como se encuentra en el momento el objeto.
-		//En estado de persistent el dato estaría vinculado a la bbdd
+		// Esto es un estado de transient, es decir que no está asociado a la bbdd ni a
+		// ningún registro
+		// Estado del objeto es como se encuentra en el momento el objeto.
+		// En estado de persistent el dato estaría vinculado a la bbdd
 		Alumno student = new Alumno(1, "Jose", "D'Alembert Faquinenza", "jd'a@gmail.com", 28);
 		return student;
 	}
-	
+
 	@GetMapping("/list")
 	public ResponseEntity<?> listStudent() {
-		/*var nombre = "sdjfjhaskdjfhasdklfhsklfhaskl";
-		nombre.charAt(10000);*/
+		/*
+		 * var nombre = "sdjfjhaskdjfhasdklfhsklfhaskl"; nombre.charAt(10000);
+		 */
 		return ResponseEntity.ok(this.service.allStudents());
 	}
 
-	//@Valid vale para validar según lo anotado en validations en el modelo
-	
+	// @Valid vale para validar según lo anotado en validations en el modelo
+
 	@GetMapping("/{id}")
-	public ResponseEntity<?> findOneStudent(@Valid @PathVariable long id, BindingResult br) {
-		if(br.hasErrors()) {
-			return ResponseEntity
-					.status(HttpStatus.BAD_REQUEST)
-					.body(br.getAllErrors());
-		}
-		return ResponseEntity.ok(this.service.findById(id).get());			
+	public ResponseEntity<?> findOneStudent(@Valid @PathVariable long id) {
+
+		return ResponseEntity.ok(this.service.findById(id).get());
 	}
 
 	@PutMapping("/modify/{id}")
-	public ResponseEntity<?> editStudentById(@Valid @RequestBody Alumno student, @PathVariable long id) {
-		// TODO Auto-generated method stub
-		ResponseEntity<?> responseEntity = null;
-		Optional<Alumno> oa = null;//alumno
-		
-			oa =  this.service.editStudentById(student, id);
-			if (oa.isEmpty()){
-				//si no está--devolver el cuerpo vacío y 404 no content
-				responseEntity = ResponseEntity
-						.notFound()
-						.build();
-			} else {
-				//el optional tiene un alumno //si está--devolver el alumno y 200 ok
-				Alumno alumno_modificado = oa.get();
-				responseEntity = ResponseEntity.ok(alumno_modificado);
-			}
-			
-		return responseEntity;
-		
+	public ResponseEntity<?> editStudentById(@Valid @RequestBody Alumno student, @PathVariable long id,
+			BindingResult br) {
+		if (br.hasErrors()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(br.getAllErrors());
+		}
+		return ResponseEntity.ok(this.service.editStudentById(student, id).get());
+
 	}
 
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Object> deleteStudent(@PathVariable String id) {
 		// TODO Auto-generated method stub
-		long id_parsed = Long.parseLong(id);			
+		long id_parsed = Long.parseLong(id);
 		this.service.deleteStudent(id_parsed);
-		return ResponseEntity.status(HttpStatus.OK).body("Student with "+id_parsed+" id was deleted suscessfull");
+		return ResponseEntity.status(HttpStatus.OK).body("Student with " + id_parsed + " id was deleted suscessfull");
 	}
 
 	@PostMapping("/insert")
 	public ResponseEntity<?> insertStudent(@RequestBody Alumno student, BindingResult br) {
-		if(br.hasErrors()) {
-			br.getAllErrors()
-				.forEach(error->log.error(error.toString()));
-			return ResponseEntity
-					.status(HttpStatus.BAD_REQUEST)
-					.body(br.getAllErrors());
-		}else {
+		if (br.hasErrors()) {
+			br.getAllErrors().forEach(error -> log.error(error.toString()));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(br.getAllErrors());
+		} else {
 			Alumno a = this.service.insertStudent(student);
-			return ResponseEntity.status(HttpStatus.CREATED).body(a);	
+			return ResponseEntity.status(HttpStatus.CREATED).body(a);
 		}
 	}
-	
+
 	@GetMapping("/between")
-	public ResponseEntity<?> betweenAges(
-			@RequestParam(required = true, name = "edadmin") int edadmin, 
-			@RequestParam(required = true, name = "edadmax") int edadmax){
+	public ResponseEntity<?> betweenAges(@RequestParam(required = true, name = "edadmin") int edadmin,
+			@RequestParam(required = true, name = "edadmax") int edadmax) {
 		ResponseEntity<?> responseEntity = null;
 		Iterable<Alumno> ita = null;// lista de alumnos
 		ita = this.service.findByEdadBetween(edadmin, edadmax);
 		responseEntity = ResponseEntity.ok(ita);// ita es el cuerpo
 		return responseEntity;
 	}
-	
+
 	@GetMapping("/contains")
-	public ResponseEntity<?> listByName(
-			@RequestParam(required = true, name = "nombre") String nombre){
+	public ResponseEntity<?> listByName(@RequestParam(required = true, name = "nombre") String nombre) {
 		return ResponseEntity.ok(this.service.findByNombreContaining(nombre));
 	}
-	
+
 	@GetMapping("/findby/{pattern}")
-	public ResponseEntity<?> getByPattern(String pattern){
+	public ResponseEntity<?> getByPattern(String pattern) {
 		return ResponseEntity.ok(this.service.findByNameOrSurname(pattern));
 	}
-	
+
 	@GetMapping("/findclass")
-	public ResponseEntity<?> getByPatt(
-			@RequestParam(required = true, name = "pattern") String pattern){
+	public ResponseEntity<?> getByPatt(@RequestParam(required = true, name = "pattern") String pattern) {
 		return ResponseEntity.ok(this.service.findByNameOrSurnameNoNative(pattern));
 	}
-	
+
 	@GetMapping("/stadistics")
-	public ResponseEntity<?> getStadistics(){
+	public ResponseEntity<?> getStadistics() {
 		return ResponseEntity.ok(this.service.stadistics());
 	}
-	
+
 	@GetMapping("/stadisticsdate")
-	public ResponseEntity<?> getSudentsToday(){
-		return ResponseEntity.ok(this.service.studentsRegisteredToday());	
+	public ResponseEntity<?> getSudentsToday() {
+		return ResponseEntity.ok(this.service.studentsRegisteredToday());
 	}
-	
-	// https://docs.spring.io/spring-data/commons/docs/2.4.5/api/org/springframework/data/domain/Pageable.html pageables
+
+	// https://docs.spring.io/spring-data/commons/docs/2.4.5/api/org/springframework/data/domain/Pageable.html
+	// pageables
 	// GET http://localhost:8081/students/pagedstudents?page=0&size=2
-	@GetMapping("/pagedstudents") 
-	public ResponseEntity<?> paginatedStudent(Pageable pageable){
+	@GetMapping("/pagedstudents")
+	public ResponseEntity<?> paginatedStudent(Pageable pageable) {
 		return ResponseEntity.ok(this.service.findAll(pageable));
 	}
-	
+
 	// http://localhost:8081/students/pagedbyage?edadmin=2&edadmax=40&page=0&size=3
 	@GetMapping("/pagedbyage")
-	public ResponseEntity<?> paginatedByAges(
-			@RequestParam(required = true, name = "edadmin") int edadmin, 
-			@RequestParam(required = true, name = "edadmax") int edadmax, Pageable pageable){
+	public ResponseEntity<?> paginatedByAges(@RequestParam(required = true, name = "edadmin") int edadmin,
+			@RequestParam(required = true, name = "edadmax") int edadmax, Pageable pageable) {
 		return ResponseEntity.ok(this.service.findByEdadBetween(edadmin, edadmax, pageable));
 	}
-	
+
 	@GetMapping("/chiquitada")
-	public ResponseEntity<?> chiquitada(){
+	public ResponseEntity<?> chiquitada() {
 		Optional<Chiquitada> ch = this.service.randomChiquito();
-		return ResponseEntity.ok((ch.isPresent())?this.service.randomChiquito():null);
+		return ResponseEntity.ok((ch.isPresent()) ? this.service.randomChiquito() : null);
 	}
-	
+
 }
