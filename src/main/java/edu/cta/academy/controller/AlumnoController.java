@@ -1,5 +1,6 @@
 package edu.cta.academy.controller;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -9,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import edu.cta.academy.DTO.Chiquitada;
 import edu.cta.academy.repository.entity.Alumno;
@@ -42,6 +46,12 @@ public class AlumnoController {
 
 	@Autowired
 	AlumnoService service;
+	
+	@Value("${instancia}")
+	String nombre_instancia;
+	
+	@Autowired
+	Environment env;
 
 	// ResponseEntity: mensaje http de respuesta,
 	// se puede cambiar el wildcard ? por una clase
@@ -61,6 +71,7 @@ public class AlumnoController {
 		/*
 		 * var nombre = "sdjfjhaskdjfhasdklfhsklfhaskl"; nombre.charAt(10000);
 		 */
+		log.debug("Atendido por "+nombre_instancia+" Puerto: "+env.getProperty("local.server.port"));
 		return ResponseEntity.ok(this.service.allStudents());
 	}
 
@@ -155,6 +166,39 @@ public class AlumnoController {
 	public ResponseEntity<?> chiquitada() {
 		Optional<Chiquitada> ch = this.service.randomChiquito();
 		return ResponseEntity.ok((ch.isPresent()) ? this.service.randomChiquito() : null);
+	}
+	
+	/*
+	 * get fotoPorId
+	 * put editarAlumnoFoto
+	 * post postAlumnoConFoto
+	 * */
+	
+	// http://localhost:8081/students/insert-with-photo
+	@PostMapping("/insert-with-photo")
+	public ResponseEntity<?> insertWithPhoto(Alumno student, BindingResult br, MultipartFile f) throws IOException{
+		Alumno a = null;
+		if (br.hasErrors()) {
+			br.getAllErrors().forEach(error -> log.error(error.toString()));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(br.getAllErrors());
+		} else {
+			if(!f.isEmpty()) {
+				log.debug("Hay foto");
+				try {
+					student.setPhoto(f.getBytes());
+					a = this.service.insertStudent(student);									
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					throw e;
+				}
+			}
+			return ResponseEntity.status(HttpStatus.CREATED).body(a);
+		}
+	}
+	
+	@GetMapping("student-image")
+	public ResponseEntity<?> studentImage(long id){
+		return null;
 	}
 
 }

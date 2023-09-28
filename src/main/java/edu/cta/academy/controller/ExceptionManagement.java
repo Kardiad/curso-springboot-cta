@@ -1,5 +1,7 @@
 package edu.cta.academy.controller;
 
+import java.io.IOException;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,4 +35,5 @@ public class ExceptionManagement {
 	public ResponseEntity<?> errThrowable(Throwable e){
 		return ResponseEntity.internalServerError().body(e.getMessage());
 	}
+
 }

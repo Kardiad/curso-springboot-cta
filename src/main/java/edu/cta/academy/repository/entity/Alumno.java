@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -16,6 +17,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.ParameterMode;
 import javax.persistence.NamedStoredProcedureQueries;
 import javax.persistence.NamedStoredProcedureQuery;
@@ -51,6 +55,11 @@ public class Alumno {
 	@NotEmpty
 	@NotBlank // No valen strings vacíos
 	private String surname;
+	
+	@Lob
+	@JsonIgnore
+	@Column(name="foto")
+	private byte[] photo;
 	
 	@Column(name="correo_electronico")
 	@Email
@@ -132,8 +141,22 @@ public class Alumno {
 	public void setAdmision(LocalDateTime admision) {
 		this.admision = admision;
 	}
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
 	
-	
-	
-	
+	/*
+	 * Este método es para ver si tiene o no una foto asociada a su perfil, en caso de no tener será null su valor
+	 * */
+	public Integer getPhotoHashCode() {
+		if(this.photo!=null) {
+			return this.photo.hashCode();
+		}
+		return null;
+	}
 }
