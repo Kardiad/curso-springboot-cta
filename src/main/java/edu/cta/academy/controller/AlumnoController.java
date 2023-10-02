@@ -12,8 +12,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -196,9 +199,15 @@ public class AlumnoController {
 		}
 	}
 	
-	@GetMapping("student-image")
-	public ResponseEntity<?> studentImage(long id){
-		return null;
+	//NO TE OLVIDES EL PATH VARIABLE Y QUE AQUÍ SE USA EL OBJETO DE NORMAL
+	@GetMapping("/student-image/{id}")
+	public ResponseEntity<?> studentImage(@PathVariable Long id){
+		Optional<Alumno> s = this.service.findById(id);
+		if(!s.isEmpty()) {
+			Resource i = new ByteArrayResource(s.get().getPhoto());			
+			return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(i);
+		}
+		return ResponseEntity.badRequest().body(null);
 	}
 
 }
